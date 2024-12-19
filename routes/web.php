@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\MapController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +35,17 @@ Route::resource('articles', ArticleController::class)->except(['show']);
 
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
+
+Route::get('/map', [MapController::class, 'index'])->name('map');
+
+
+// Маршруты для редактирования комментариев
+Route::middleware(['auth'])->group(function () {
+    // Маршрут для редактирования комментария
+    Route::get('/articles/{article}/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+});
+
+Route::put('/articles/{article}/comments/{comment}', [CommentController::class, 'update'])->name('comments.update')->middleware('auth');
+Route::get('/articles', [ArticleController::class, 'index']);
+Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
+Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');

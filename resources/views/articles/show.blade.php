@@ -12,9 +12,11 @@
             @if (auth()->check())
                 <form method="POST" action="{{ route('logout') }}" class="nav-form">
                     @csrf
+                    <a href="{{ route('home') }}" class="nav-link">Главная</a>
                     <button type="submit" class="nav-link">Выйти</button>
                 </form>
             @else
+            <a href="{{ route('home') }}" class="nav-link">Главная</a>
                 <a href="{{ route('login') }}" class="nav-link">Вход</a>
                 <a href="{{ route('register') }}" class="nav-link">Регистрация</a>
             @endif
@@ -24,7 +26,6 @@
     <div class="article-container">
         <article class="article-content">
             <h1>{{ $article->title }}</h1>
-            
             @if($article->hasMedia('posters'))
                 <div class="article-image">
                     <img src="{{ $article->getFirstMediaUrl('posters') }}" alt="{{ $article->title }}">
@@ -62,9 +63,13 @@
             <div class="comments-list">
                 @foreach($article->comments()->with('user')->latest()->get() as $comment)
                     <div class="comment">
-                        <div class="comment-author">{{ $comment->user->name }}</div>
-                        <div class="comment-content">{{ $comment->content }}</div>
-                        <div class="comment-date">{{ $comment->created_at->diffForHumans() }}</div>
+                        <p>{{ $comment->content }}</p>
+                        <small>Автор: {{ $comment->user->name }}</small>
+
+                        <!-- Ссылка для редактирования, если комментарий принадлежит текущему пользователю -->
+                        @if($comment->user_id === auth()->id())
+                            <a href="{{ route('comments.edit', ['article' => $article->id, 'comment' => $comment->id]) }}" class="btn btn-warning btn-sm">Редактировать</a>
+                        @endif
                     </div>
                 @endforeach
             </div>
@@ -73,6 +78,7 @@
 
     <footer>
         <div class="footer-logo">EcoBin</div>
+    
     </footer>
 </body>
 </html>

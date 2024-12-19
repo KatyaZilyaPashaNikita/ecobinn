@@ -9,6 +9,7 @@
 <body>
     <header>
         <nav>
+        <a href="{{ route('home') }}" class="nav-link">Главная</a>
             @if (auth()->check())
                 <form method="POST" action="{{ route('logout') }}" class="nav-form">
                     @csrf

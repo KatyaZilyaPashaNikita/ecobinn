@@ -14,11 +14,23 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'admin',
-            'email' => 'root@root.com',
-            'is_admin' => true,
-            'password' => Hash::make('toor'),
-        ]);
+        User::firstOrCreate(
+            ['email' => 'root@root.com'], // Уникальное условие
+            [
+                'name' => 'admin',
+                'password' => Hash::make('toor'),
+                'is_admin' => true,
+            ]
+        );
+        
+        User::firstOrCreate(
+            ['email' => 'user@ex.com'], // Уникальное условие
+            [
+                'name' => 'Обычный пользователь',
+                'password' => Hash::make('exxx'),
+                'is_admin' => false,
+            ]
+        );
     }
+    
 }

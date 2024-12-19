@@ -23,8 +23,9 @@
                 <a href="{{ route('register') }}" class="nav-link">Регистрация</a>
             @endif
             @if ($isAdmin)
-                <a href="{{ route('articles.create') }}" class="nav-link">Создать статью</a>
+            <a href="{{ route('articles.create') }}" class="nav-link">Создать статью</a>
             @endif
+            <a href="{{ route('map') }}" class="nav-link">Карта</a>
         </nav>
     </header>
 
@@ -71,20 +72,23 @@
         <p>Переработка мусора - это не только способ помочь природе, но и шанс создать что-то новое из того, что казалось ненужным</p>
     </div>
 
-    <section class="articles">
-        <div class="articles-grid">
-            @foreach ($articles as $article)
-                <div class="article-card">
+    <section class="latest-articles">
+    <h2>Последние статьи</h2>
+    <div class="articles-grid">
+        @foreach ($latestArticles as $article)
+            <div class="article-card">
                 <div class="article-poster">
-    @if($article->hasMedia('posters'))
-        <img src="{{ $article->getFirstMediaUrl('posters') }}" alt="{{ $article->title }}">
-    @endif
-</div>
-                    <h3><a href="{{ route('articles.show', $article) }}">{{ $article->title }}</a></h3>
+                    @if($article->hasMedia('posters'))
+                        <img src="{{ $article->getFirstMediaUrl('posters') }}" alt="{{ $article->title }}">
+                    @endif
                 </div>
-            @endforeach
-        </div>
-        {{ $articles->links() }}
+                <h3><a href="{{ route('articles.show', $article) }}">{{ $article->title }}</a></h3>
+            </div>
+      
+       
+        @endforeach
+       
+        <a href="{{ route('articles.index') }}" class="btn btn-primary">Все статьи</a>
     </section>
 
     <section class="recycling-benefits">

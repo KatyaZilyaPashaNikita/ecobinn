@@ -9,9 +9,19 @@ class HomeController extends Controller
 {
     public function index()
     {
+        // Получаем 3 последние статьи для отображения на главной странице
+        $latestArticles = Article::latest()->take(3)->get();
+
+        // Получаем оставшиеся статьи (все кроме последних 3)
         $articles = Article::latest()->paginate(10);
+
+        // Проверяем, авторизован ли пользователь
         $isLoggedIn = Auth::check();
+
+        // Проверяем, является ли пользователь администратором
         $isAdmin = $isLoggedIn ? Auth::user()->is_admin : false;
-        return view('home', compact('articles', 'isLoggedIn', 'isAdmin'));
+
+        // Передаем данные в представление
+        return view('home', compact('latestArticles', 'articles', 'isLoggedIn', 'isAdmin'));
     }
 }
