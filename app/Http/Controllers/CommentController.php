@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
     /**
+     * Конструктор для проверки прав администратора
+     */
+    public function __construct()
+    {
+        $this->middleware('auth'); // Убедимся, что пользователь авторизован
+        // $this->middleware('is_admin')->only('destroy'); // Убедимся, что только администратор может удалять
+    }
+
+    /**
      * Показать форму для редактирования комментария.
      *
      * @param  int  $articleId
@@ -42,19 +51,7 @@ class CommentController extends Controller
      * @param  int  $articleId
      * @param  int  $commentId
      * @return \Illuminate\Http\RedirectResponse
-     */ public function store(Request $request, Article $article)
-    {
-        $validated = $request->validate([
-            'content' => 'required|max:1000'
-        ]);
-
-        $article->comments()->create([
-            'content' => $validated['content'],
-            'user_id' => auth()->id()
-        ]);
-
-        return back();
-    }
+     */
     public function update(Request $request, $articleId, $commentId)
     {
         // Валидация данных
@@ -83,14 +80,57 @@ class CommentController extends Controller
         return redirect()->route('articles.show', $articleId)
                          ->with('success', 'Комментарий успешно обновлен.');
     }
-    public function destroy(Comment $comment)
+
+    /**
+     * Удалить комментарий (только для администратора).
+     *
+     * @param  int  $commentId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy($commentId)
     {
+        // Находим комментарий по ID
+        $comment = Comment::findOrFail($commentId);
+
         // Проверка на права администратора
         if (auth()->user()->is_admin) {
             $comment->delete();  // Удаление комментария
-            return redirect()->back()->with('status', 'Комментарий удалён.');
+            return back();
         }
 
-        return redirect()->back()->with('error', 'У вас нет прав для удаления комментариев.');
+        return back()->with('error', 'У вас нет прав для удаления комментариев.');
+    }
+
+    /**
+     * Отображение всех комментариев.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function index()
+    {
+        // Получаем все комментарии
+        $comments = Comment::all();
+        return view('comments.index', compact('comments'));
+    }
+
+    /**
+     * Добавить новый комментарий к статье.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $articleId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request, Article $article)
+    {
+        $validated = $request->validate([
+            'content' => 'required|max:1000'
+        ]);
+
+        $article->comments()->create([
+            'content' => $validated['content'],
+            'user_id' => auth()->id()
+        ]);
+
+        return back();
     }
 }

@@ -15,7 +15,7 @@ html, body {
 }
 
 header {
-    background: linear-gradient(135deg, #9BE69D 0%, #7bc97e 100%);
+    background: linear-gradient(135deg, #5DAD60 0%, #7bc97e 100%);
     padding: 1rem;
 }
 
@@ -24,11 +24,17 @@ nav {
     justify-content: flex-end;
     margin-left: 1rem;
 }
+.nav-links {
+    color: #5DAD60; /* Ваш цвет */
+    margin-left: 86px;
+    font-size: 18px; 
+}
+
 
 .nav-link {
     color: #FFF;
     text-decoration: none;
-    margin-left: 1rem;
+    margin-left: 3rem;
 }
 
 .nav-form {
@@ -48,7 +54,7 @@ nav {
 }
 
 .promo-header {
-    background: linear-gradient(135deg, #9BE69D 0%, #7bc97e 100%);
+    background: linear-gradient(135deg, #5DAD60 0%, #7bc97e 100%);
     padding: 4rem 2rem;
     width: 100%;
     box-sizing: border-box;
@@ -93,11 +99,10 @@ nav {
 }
 
 .section-title {
-    color: #9BE69D;
+    color: #5DAD60;
     text-align: center;
     font-size: 36px;
     font-weight: 700;
-    margin: 2rem 0 3rem;
     padding: 0 1rem 1rem;
     position: relative;
 }
@@ -110,7 +115,7 @@ nav {
     transform: translateX(-50%);
     width: 60px;
     height: 4px;
-    background: #9BE69D;
+    background: #5DAD60;
     border-radius: 2px;
 }
 
@@ -162,7 +167,7 @@ nav {
 
 .info-card .divider {
     height: 2px;
-    background: #9BE69D;
+    background: #5DAD60;
     margin: 1rem auto;
     width: 80%;
 }
@@ -179,11 +184,31 @@ nav {
     font-size: 24px;
     max-width: 600px;
     margin: 4rem 0;
-    color: #9BE69D;
+    color: #5DAD60;
     font-weight: 500;
     word-wrap: break-word;
     background: #f8f9fa;
     position: relative;
+}
+.latest-articles .articles-grid .article-card h3 {
+    text-align: left; /* Выровнять по левому краю */
+    margin-left: 5px; /* Отступ слева (можете подкорректировать значение) */
+    font-size: 1.25rem; /* Размер шрифта */
+    font-weight: bold; /* Жирный шрифт для заголовка */
+    color: #333; /* Цвет текста, можно настроить под нужды */
+}
+
+.latest-articles .articles-grid .article-card .article-poster {
+    margin-bottom: 10px; /* Отступ снизу картинки */
+}
+
+.latest-articles .articles-grid .article-card h3 {
+    margin-top: 0; /* Убираем верхний отступ */
+    margin-bottom: 5px; /* Меньший отступ снизу между заголовком и описанием */
+}
+
+.latest-articles .articles-grid .article-card .card-text {
+    margin-top: 0; /* Убираем верхний отступ у описания */
 }
 
 .articles-grid {
@@ -195,7 +220,7 @@ nav {
 }
 
 .article-card {
-    border: 2px solid #9BE69D;
+    border: 2px solid #5DAD60;
     background: #FFF;
     padding: 1rem;
     width: 100%;
@@ -237,11 +262,23 @@ nav {
     text-decoration: none;
 }
 
+.btn-read{
+    padding: 12px 24px; /* Внутренние отступы для кнопки */
+    background-color: #4CAF50; /* Зеленый цвет фона */
+    color: white; /* Белый цвет текста */
+    font-size: 16px; /* Размер шрифта */
+    font-weight: 600; /* Полужирный шрифт */
+    border: none; /* Убирает стандартную границу */
+    border-radius: 8px; /* Скругление углов */
+    cursor: pointer; /* Курсор в виде руки */
+    transition: background-color 0.3s, transform 0.2s;
+}
+
 .load-more {
     display: block;
     margin: 2rem auto;
     padding: 1rem 3rem;
-    background: #9BE69D;
+    background: #5DAD60;
     color: white;
     border: none;
     cursor: pointer;
@@ -265,7 +302,7 @@ nav {
 
 .myth-card {
     border-radius: 25px;
-    border: 2px solid #9BE69D;
+    border: 2px solid #5DAD60;
     padding: 1rem;
     min-height: 120px;
     display: flex;
@@ -291,7 +328,7 @@ nav {
 }
 
 footer {
-    background: #9BE69D;
+    background: #5DAD60;
     padding: 2rem;
     display: flex;
     justify-content: space-between;
@@ -317,6 +354,8 @@ footer {
     font-weight: 700;
     line-height: normal;
 }
+
+
 
 @media (max-width: 768px) {
     .promo-header {
@@ -519,18 +558,109 @@ footer {
     padding: 0.75rem 2rem;
     border-radius: 8px;
     border: none;
-    background: #9BE69D;
-    color: white;
+    background: #5DAD60;
+    color: white  !important;
     cursor: pointer;
     text-decoration: none;
     font-size: 16px;
     font-weight: 600;
     transition: background-color 0.2s;
 }
+.buttonn {
+    padding: 0.5rem 1.5rem; /* Уменьшены отступы */
+    border-radius: 4px;
+    border: none;
+    background: #5DAD60;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px; /* Уменьшен размер шрифта */
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.comment-actions {
+    margin-top: 10px; /* Добавляем отступ сверху */
+    text-align: right; /* Выравниваем кнопки по правому краю */
+}
+
+.comment-actions .btn {
+    font-size: 0.8rem;  /* Уменьшаем размер шрифта */
+    padding: 5px 10px;  /* Уменьшаем отступы внутри кнопок */
+    border-radius: 5px;  /* Сглаживаем углы кнопок */
+    transition: background-color 0.3s ease;  /* Плавный переход цвета фона при наведении */
+    text-decoration: none; /* Убираем подчеркивание */
+}
+
+/* Стили для кнопок при наведении */
+.comment-actions .btn:hover {
+    opacity: 0.85;  /* Уменьшаем прозрачность кнопки при наведении */
+}
+
+/* Стили для кнопки "Редактировать" */
+.comment-actions .btn-warning {
+    background-color: #28a745; /* Заменяем желтый фон на зелёный */
+    border: none;  /* Убираем бордер */
+    color: white;  /* Текст белого цвета */
+}
+
+/* Стили для кнопки "Удалить" */
+.comment-actions .btn-danger {
+    background-color: #28a745; /* Заменяем красный фон на зелёный */
+    border: none;  /* Убираем бордер */
+    color: white;  /* Текст белого цвета */
+}
+
+/* При наведении кнопка "Редактировать" становится темнее */
+.comment-actions .btn-warning:hover {
+    background-color: #218838; /* Тёмно-зелёный при наведении */
+}
+
+/* При наведении кнопка "Удалить" становится темнее */
+.comment-actions .btn-danger:hover {
+    background-color: #218838; /* Тёмно-зелёный при наведении */
+}
+
+
+
+
+
+.containers {
+    display: flex;
+    align-items: center; /* Центрирование по вертикали */
+    height: 100vh; /* Задаем высоту контейнера */
+}
+
+.button-all {
+    padding: 0.75rem 1rem; /* Уменьшаем горизонтальные отступы */
+    border-radius: 8px;
+    border: none;
+    background: #5DAD60;
+    color: white !important;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 400;
+    transition: background-color 0.2s;
+    min-width: 0; /* Убираем минимальную ширину */
+    width: 100px; /* Фиксированная ширина кнопки */
+    height: 50px;
+    line-height: 50px; /* Центрируем текст по вертикали */
+    text-align: center; /* Центрируем текст по горизонтали */
+    margin-left: 86px; /* Отступ от левого края страницы */
+    box-sizing: border-box; /* Учитываем padding и border в общей ширине */
+}
+
 
 .button.delete {
     background: #ff6b6b;
 }
+
+
+.comments-list {
+    margin-top: 20px; /* Отступ сверху 20 пикселей */
+}
+
 
 .comments-section {
     background: #FFF;
@@ -549,7 +679,7 @@ footer {
 .comment-form textarea {
     width: 100%;
     padding: 1rem;
-    border: 2px solid #9BE69D;
+    border: 2px solid #5DAD60;
     border-radius: 10px;
     margin-bottom: 1rem;
     font-family: inherit;
@@ -599,7 +729,7 @@ footer {
 }
 
 .login-prompt a {
-    color: #9BE69D;
+    color: #5DAD60;
     text-decoration: none;
 }
 
@@ -644,7 +774,7 @@ footer {
 .auth-form input {
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 2px solid #9BE69D;
+    border: 2px solid #5DAD60;
     border-radius: 8px;
     font-size: 16px;
     font-family: inherit;
@@ -687,7 +817,7 @@ footer {
 .form-group input {
     width: 100%;
     padding: 1rem;
-    border: 2px solid #9BE69D;
+    border: 2px solid #5DAD60;
     border-radius: 10px;
     font-size: 16px;
     font-family: inherit;
@@ -702,7 +832,7 @@ footer {
 .form-group textarea {
     width: 100%;
     padding: 1rem;
-    border: 2px solid #9BE69D;
+    border: 2px solid #5DAD60;
     border-radius: 10px;
     font-size: 16px;
     font-family: inherit;
@@ -737,7 +867,7 @@ footer {
 }
 
 section {
-    padding: 4rem 0;
+    padding: 0.5rem 0;
 }
 
 .create-article {

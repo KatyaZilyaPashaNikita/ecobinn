@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoBin</title>
+    
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=K2D:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -71,26 +72,27 @@
     <div class="section-title">
         <p>Переработка мусора - это не только способ помочь природе, но и шанс создать что-то новое из того, что казалось ненужным</p>
     </div>
-
     <section class="latest-articles">
-    <h2>Последние статьи</h2>
     <div class="articles-grid">
         @foreach ($latestArticles as $article)
             <div class="article-card">
                 <div class="article-poster">
-                    @if($article->hasMedia('posters'))
-                        <img src="{{ $article->getFirstMediaUrl('posters') }}" alt="{{ $article->title }}">
+                    @if($article->hasMedia('images'))
+                        <img src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}">
                     @endif
                 </div>
                 <h3><a href="{{ route('articles.show', $article) }}">{{ $article->title }}</a></h3>
+                <p class="card-text">{{ \Illuminate\Support\Str::limit($article->content, 150) }}</p>
             </div>
       
        
         @endforeach
        
-        <a href="{{ route('articles.index') }}" class="btn btn-primary">Все статьи</a>
+       
     </section>
-
+    <div class="containers">
+    <a href="{{ route('articles.index') }}" class="nav-links">Все статьи</a>
+    </div>
     <section class="recycling-benefits">
         <h2 class="section-title">Переработка мусора помогает сэкономить ресурсы</h2>
         <div class="cards-row">

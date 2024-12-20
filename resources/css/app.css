@@ -119,6 +119,12 @@ nav {
     cursor: pointer;
 }
 
+.btn-primary{
+    color: #000;
+    text-decoration: none;
+    margin-left: 1rem;
+}
+
 .myths-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

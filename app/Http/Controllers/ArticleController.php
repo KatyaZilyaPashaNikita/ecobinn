@@ -1,163 +1,167 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\Article;
 use Illuminate\Http\Request;
 
+// app/Http/Controllers/ArticleController.php
 class ArticleController extends Controller
 {
-    /**
-     * Главная страница с последними статьями
-     */
+
+    public function search(Request $request)
+    {
+        // Получаем параметр 'search' из запроса
+        $search = $request->get('search');
+
+        if ($search) {
+            // Выполняем поиск по названию
+            $articles = Article::where('title', 'like', '%' . $search . '%')->get();
+            return view('articles.index', compact('articles'));
+        }
+
+        // Если поиск не задан, выводим все статьи
+        $articles = Article::all();
+        return view('articles.index', compact('articles'));
+    }
+
+
+    // Метод для скрытия статьи
+    public function hide($id)
+    {
+        $article = Article::findOrFail($id);
+
+        // Проверяем, является ли пользователь администратором
+        if (auth()->check() && auth()->user()->is_admin) {
+            $article->update(['is_hidden' => true]);
+
+            return redirect()->route('articles.index')->with('status', 'Статья скрыта');
+        }
+
+        return redirect()->route('articles.index')->with('error', 'У вас нет прав для выполнения этого действия');
+    }
+
+    // Метод для восстановления статьи
+    public function restore($id)
+    {
+        $article = Article::findOrFail($id);
+
+        // Проверяем, является ли пользователь администратором
+        if (auth()->check() && auth()->user()->is_admin) {
+            $article->update(['is_hidden' => false]);
+
+            return redirect()->route('articles.index')->with('status', 'Статья восстановлена');
+        }
+
+        return redirect()->route('articles.index')->with('error', 'У вас нет прав для выполнения этого действия');
+    }
+
+    // Оставшиеся методы
     public function homeArticles()
     {
-        // Получаем последние 4 статьи с медиа-контентом и пагинацией
-        $articles = Article::with('media')->latest()->paginate(4);
-        
-        // Проверяем, авторизован ли пользователь
-        $isLoggedIn = auth()->check();
-        
-        // Возвращаем представление с данными
-        return view('articles.show', [
-            'articles' => $articles,
-            'isLoggedIn' => $isLoggedIn, // Передаем информацию о статусе входа
-            'page' => 'home'  // Мета-информация для различия представлений (например, для навигации)
-        ]);
+        $articles = Article::with('media')->latest()->paginate(10);
+        return view('home', compact('articles'));
     }
 
-    /**
-     * Список всех статей
-     */
     public function index(Request $request)
     {
-        // Получаем параметр 'search' из запроса (если он существует)
-        $search = $request->get('search');
-    
-        // Устанавливаем количество статей на странице (по умолчанию 100)
-        $perPage = $request->get('perPage', 100);
-    
-        // Строим запрос для получения статей
-        $query = Article::with('media')->latest();
-    
-        // Если задано слово для поиска, добавляем фильтрацию по названию
-        if ($search) {
-            $query->where('title', 'like', '%' . $search . '%');
-        }
-    
-        // Получаем статьи с пагинацией
-        $articles = $query->paginate($perPage);
-    
-        // Возвращаем представление с данными
-        return view('articles.index', [
-            'articles' => $articles, // Список статей с пагинацией
-            'page' => 'index',  // Мета-информация для различия представлений
-        ]);
-    }
-    
+        $articles = Article::where(["is_hidden" => false]);
 
-    /**
-     * Форма создания новой статьи
-     */
+        // Фильтрация по заголовку
+        if ($request->has('title')) {
+            $articles->where('title', 'like', '%' . $request->input('title') . '%');
+        }
+
+        $articles = $articles->latest()->paginate(10);
+
+        return view('articles.index', compact('articles'));
+    }
+
     public function create()
     {
-        // Возвращаем представление для создания статьи
-        return view('articles.create', [
-            'page' => 'create'  // Мета-информация для различия представлений
-        ]);
+        
+        return view('articles.create');
     }
 
-    /**
-     * Сохранение новой статьи
-     */
     public function store(Request $request)
     {
-        // Валидация входных данных
         $validated = $request->validate([
-            'title' => 'required|max:255',
+            'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'poster' => 'required|image',
+            'poster' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // проверка для 'poster'
         ]);
-
-        // Создание новой статьи в базе данных
-        $article = Article::create([
-            'title' => $validated['title'],
-            'content' => $validated['content'],
-            'user_id' => auth()->id(),
-        ]);
-
-        // Добавляем изображение в коллекцию
-        $article->addMediaFromRequest('poster')->toMediaCollection('posters');
-
-        // Перенаправляем на главную страницу
-        return redirect()->route('articles.index');
-    }
-
-    /**
-     * Показ полной статьи
-     */
-    public function show(Article $article)
-    {
-        // Возвращаем представление с данными
-        return view('articles.show', [
-            'article' => $article,
-            'page' => 'show'  // Мета-информация для различия представлений
-        ]);
-    }
-
-    /**
-     * Показ формы редактирования статьи
-     */
-    public function edit(Article $article)
-    {
-        // Возвращаем представление с данными для редактирования
-        return view('articles.show', [
-            'article' => $article,
-            'page' => 'edit'  // Мета-информация для различия представлений
-        ]);
-    }
-
-    /**
-     * Обновление статьи
-     */
-    public function update(Request $request, Article $article)
-    {
-        // Валидация входных данных
-        $validated = $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required',
-            'poster' => 'nullable|image',
-        ]);
-
-        // Обновление данных статьи
-        $article->update([
-            'title' => $validated['title'],
-            'content' => $validated['content'],
-        ]);
-
-        // Если загружено новое изображение, заменяем его
+    
+        $article = new Article();
+        $article->user_id = Auth::id();
+        $article->title = $validated['title'];
+        $article->content = $validated['content'];
+        $article->is_hidden = false;  // Статья по умолчанию не скрыта
+        $article->save();
+    
+        // Обработка изображения, если оно присутствует
         if ($request->hasFile('poster')) {
-            $article->clearMediaCollection('posters');  // Очищаем старую коллекцию
-            $article->addMediaFromRequest('poster')->toMediaCollection('posters'); // Добавляем новое изображение
+            // Сохраняем изображение в папку 'public/articles'
+            $path = $request->file('poster')->store('public/articles');
+            
+            // Добавляем изображение в коллекцию 'images'
+            $article->addMedia(storage_path("app/{$path}"))
+                    ->toMediaCollection('images');
+        }
+    
+        return redirect()->route('articles.index')->with('status', 'Статья успешно создана');
+    }
+    
+    public function show($id)
+    {
+        $article = Article::findOrFail($id);
+        return view('articles.show', compact('article'));
+    }
+
+    public function edit($id)
+    {
+        $article = Article::findOrFail($id);
+        return view('articles.edit', compact('article'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);
+
+        $article = Article::findOrFail($id);
+        $article->title = $validated['title'];
+        $article->content = $validated['content'];
+        $article->save();
+
+        // Обработка нового изображения
+        if ($request->hasFile('image')) {
+            // Удаление старого изображения
+            if ($article->media->isNotEmpty()) {
+                $article->media->first()->delete();
+            }
+
+            // Сохранение нового изображения
+            $path = $request->file('image')->store('public/articles');
+            $article->addMedia(storage_path("app/{$path}"))
+                    ->toMediaCollection('images');
         }
 
-        // Перенаправляем на страницу статьи
-        return redirect()->route('posts.show', $article);
+        return redirect()->route('articles.index')->with('status', 'Статья обновлена');
     }
 
-    /**
-     * Удаление статьи
-     */
-    public function destroy(Article $article)
+    public function destroy($id)
     {
-        // Удаление статьи из базы
+        $article = Article::findOrFail($id);
         $article->delete();
 
-        // Перенаправляем на главную страницу
-        return redirect()->route('home');
-    }
-    
+        // Удаление связанного медиа
+        if ($article->media->isNotEmpty()) {
+            $article->media->first()->delete();
+        }
 
- 
-    
+        return redirect()->route('articles.index')->with('status', 'Статья удалена');
+    }
 }

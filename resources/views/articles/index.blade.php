@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Все статьи</title>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <!-- Подключение Bootstrap -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -36,42 +37,44 @@
 </header>
 
 <div class="container mt-5">
-    <h1 class="mb-4">Все статьи</h1>
+<h2 class="section-title">Все статьи</h2>
 
     <!-- Форма поиска -->
-    <form method="GET" action="{{ route('articles.index') }}" class="mb-4">
+    <form method="GET" action="{{ route('search') }}" class="mb-4">
         <div class="input-group">
             <input type="text" name="search" class="form-control" placeholder="Поиск по названию" value="{{ request('search') }}">
             <div class="input-group-append">
-                <button class="btn btn-primary" type="submit">Поиск</button>
+                <button class="buttonn" type="submit">Поиск</button>
             </div>
         </div>
     </form>
 
     <div class="row">
-        @foreach($articles as $article)
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <!-- Проверка на наличие медиафайла в коллекции 'posters' -->
-                    @if($article->hasMedia('posters'))
-                        <img src="{{ $article->getFirstMediaUrl('posters') }}" class="card-img-top" alt="{{ $article->title }}">
-                    @else
-                        <!-- Если изображения нет, показываем изображение по умолчанию -->
-                        <img src="{{ asset('images/default_image.jpg') }}" class="card-img-top" alt="Изображение по умолчанию">
-                    @endif
+@foreach($articles as $article)
+    <div class="col-md-4 mb-4">
+        <div class="article-card">
+            <!-- Проверка на наличие медиафайла в коллекции 'images' -->
+            @if($article->hasMedia('images'))
+                <img src="{{ $article->getFirstMediaUrl('images') }}" class="card-img-top" alt="{{ $article->title }}">
+            @else
+                <!-- Если изображения нет, показываем изображение по умолчанию -->
+                <img src="{{ asset('images/default_image.jpg') }}" class="card-img-top" alt="Изображение по умолчанию">
+            @endif
 
-                    <div class="card-body">
+                    
                         <h5 class="card-title">{{ $article->title }}</h5>
                         <p class="card-text">{{ \Illuminate\Support\Str::limit($article->content, 150) }}</p>
-                        <a href="{{ route('articles.show', $article->id) }}" class="btn btn-primary">Читать статью</a>
+                        <a href="{{ route('articles.show', $article->id) }}" class="button">Читать статью</a>
                     </div>
-                </div>
             </div>
         @endforeach
     </div>
 
   
 </div>
+<footer>
+        <div class="footer-logo">EcoBin</div>
+    </footer>
 
 <!-- Подключение Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

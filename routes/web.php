@@ -7,6 +7,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\PostController;
+use App\Models\Article;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +27,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-
+Route::get('/search', [ArticleController::class, 'search'])->name('search');
 Route::get('/', function () {
     return redirect('/home');
 });
@@ -43,9 +44,13 @@ Route::get('/map', [MapController::class, 'index'])->name('map');
 Route::middleware(['auth'])->group(function () {
     // Маршрут для редактирования комментария
     Route::get('/articles/{article}/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+    Route::get('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 Route::put('/articles/{article}/comments/{comment}', [CommentController::class, 'update'])->name('comments.update')->middleware('auth');
-Route::get('/articles', [ArticleController::class, 'index']);
+Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
-Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+
+Route::post('/articles/{article}/hide', [ArticleController::class, 'hide'])->name('articles.hide');
+Route::post('/articles/{article}/restore', [ArticleController::class, 'restore'])->name('articles.restore');
