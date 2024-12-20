@@ -41,7 +41,7 @@ class ArticleController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|max:255',
-            'content' => 'required',
+            'content' => 'required|string', // Текст с тегами <p>
             'poster' => 'required|image',
         ]);
 

@@ -235,6 +235,9 @@ nav {
 .article-card a {
     color: inherit;
     text-decoration: none;
+    white-space: pre-wrap;
+    word-break: break-word;
+    
 }
 
 .load-more {
@@ -502,11 +505,11 @@ footer {
 }
 
 .article-text {
-    padding: 0 1rem;
-    font-size: 18px;
-    line-height: 1.8;
-    color: #333;
-    margin-bottom: 2rem;
+    max-width: 100%; /* Блок не выходит за границы родителя */
+    word-wrap: break-word; /* Перенос длинных слов */
+    word-break: break-word; /* Альтернативный способ переноса */
+    white-space: pre-wrap; /* Сохраняет форматирование абзацев */
+    line-height: 1.5; /* Увеличенный межстрочный интервал */
 }
 
 .article-actions {

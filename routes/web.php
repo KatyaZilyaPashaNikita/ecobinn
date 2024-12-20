@@ -5,6 +5,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\MapController;
+use App\Http\Controllers\PostController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +36,7 @@ Route::resource('articles', ArticleController::class)->except(['show']);
 
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
+
+Route::get('/map', [MapController::class, 'index'])->name('map');
+/*Route::post('/comments/{comment}/like', [CommentLikeController::class, 'toggleLike'])->middleware('auth');
+Route::get('/comments', [CommentController::class, 'showComments'])->name('comments.index');*/

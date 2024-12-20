@@ -21,4 +21,14 @@ class CommentController extends Controller
 
         return back();
     }
+
+    public function showComments(Article $article)
+    {
+        // Получаем все комментарии для конкретной статьи
+        $comments = $article->comments()->with('user')->latest()->get();
+
+        // Передаем переменную $comments и $article в представление
+        return view('comments', compact('comments', 'article'));
+    }
 }
+

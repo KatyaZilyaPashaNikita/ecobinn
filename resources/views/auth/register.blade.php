@@ -10,6 +10,7 @@
     <header>
         <nav>
             <a href="{{ route('home') }}" class="nav-link">Главная</a>
+            <a href="{{ route('login') }}" class="nav-link">Вход</a>
         </nav>
     </header>
 

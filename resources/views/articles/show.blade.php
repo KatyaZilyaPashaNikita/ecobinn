@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $article->title }}</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <script src="{{ asset('js/likes.js') }}" defer></script>
 </head>
 <body>
     <header>
@@ -12,9 +13,11 @@
             @if (auth()->check())
                 <form method="POST" action="{{ route('logout') }}" class="nav-form">
                     @csrf
+                    <a href="{{ route('home') }}" class="nav-link">Главная</a>
                     <button type="submit" class="nav-link">Выйти</button>
                 </form>
             @else
+            <a href="{{ route('home') }}" class="nav-link">Главная</a>
                 <a href="{{ route('login') }}" class="nav-link">Вход</a>
                 <a href="{{ route('register') }}" class="nav-link">Регистрация</a>
             @endif
@@ -24,7 +27,6 @@
     <div class="article-container">
         <article class="article-content">
             <h1>{{ $article->title }}</h1>
-            
             @if($article->hasMedia('posters'))
                 <div class="article-image">
                     <img src="{{ $article->getFirstMediaUrl('posters') }}" alt="{{ $article->title }}">
@@ -32,7 +34,7 @@
             @endif
             
             <div class="article-text">
-                {{ $article->content }}
+                {!! $article->content !!}
             </div>
 
             @if(auth()->id() === $article->user_id)
@@ -65,6 +67,14 @@
                         <div class="comment-author">{{ $comment->user->name }}</div>
                         <div class="comment-content">{{ $comment->content }}</div>
                         <div class="comment-date">{{ $comment->created_at->diffForHumans() }}</div>
+
+                        <!-- Лайки и дизлайки для каждого комментария -->
+                        <div class="comment-likes">
+                            <button onclick="likeComment({{ $comment->id }}, true)">👍</button>
+                            <span id="like-count-{{ $comment->id }}">{{ $comment->likeCount() }}</span>
+                            <button onclick="likeComment({{ $comment->id }}, false)">👎</button>
+                            <span id="dislike-count-{{ $comment->id }}">{{ $comment->dislikeCount() }}</span>
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -74,5 +84,9 @@
     <footer>
         <div class="footer-logo">EcoBin</div>
     </footer>
+    <!-- Подключаем JS-скрипт для работы лайков -->
+    <script src="{{ asset('js/likes.js') }}" defer></script>
+
+    
 </body>
 </html>
