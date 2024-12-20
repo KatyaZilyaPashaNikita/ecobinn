@@ -127,18 +127,23 @@ nav {
 }
 
 .myth-card {
-    border-radius: 50px;
-    border: 2px solid #9BE69D;
-    padding: 2rem;
-    aspect-ratio: 1;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
 }
 
-.myth-card p {
-    color: #000;
-    text-align: center;
-    font-size: 20px;
-    font-weight: 700;
+.myth-card:hover {
+    background-color: #e0e0e0;
 }
+
+.myth-text {
+    margin: 0;
+    text-align: center;
+}
+
+
 
 footer {
     background: #9BE69D;

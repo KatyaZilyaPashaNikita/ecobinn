@@ -5,6 +5,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\MapController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +37,9 @@ Route::resource('articles', ArticleController::class)->except(['show']);
 
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
+
+Route::get('/map', [MapController::class, 'index'])->name('map');
+Route::get('/book', [HomeController::class, 'showBook'])->name('book');
+
+Route::get('/book/show', [OrderController::class, 'showOrder'])->name('showOrder');
+Route::post('/book/create', [OrderController::class, 'createOrder'])->name('createOrder');

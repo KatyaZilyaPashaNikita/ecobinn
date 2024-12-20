@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Mews\Purifier\Facades\Purifier;
 
 class Article extends Model implements HasMedia
 {
@@ -16,6 +17,10 @@ class Article extends Model implements HasMedia
     {
         return $this->belongsTo(User::class);
     }
+    public function setContentAttribute($value)
+    {
+        $this->attributes['content'] = Purifier::clean($value);
+    } 
 
     public function comments()
     {

@@ -14,4 +14,9 @@ class HomeController extends Controller
         $isAdmin = $isLoggedIn ? Auth::user()->is_admin : false;
         return view('home', compact('articles', 'isLoggedIn', 'isAdmin'));
     }
+
+    public function showBook()
+    {
+        return view('book');
+    }
 }
